@@ -25,7 +25,7 @@ import logging
 import math
 from dataclasses import dataclass
 
-from scipy import stats  # type: ignore[import-untyped]
+import scipy as sp
 
 from flameiq.core.errors import InsufficientSamplesError
 
@@ -37,21 +37,18 @@ MINIMUM_SAMPLES: int = 3
 
 @dataclass(frozen=True)
 class StatisticalResult:
-    """Result of a statistical significance test.
-
-    Attributes:
-        is_significant:  True if the difference is statistically significant.
-        p_value:         The test p-value. Lower = stronger evidence.
-        effect_size:     Cohen's *d* effect size. Positive = current > baseline.
-        test_name:       The test used (e.g. ``"Mann-Whitney U"``).
-        confidence_level: The confidence level (default 0.95).
-    """
+    """Result of a statistical significance test."""
 
     is_significant: bool
+    """True if the difference is statistically significant."""
     p_value: float
+    """The test p-value. Lower = stronger evidence."""
     effect_size: float
+    """Cohen's *d* effect size. Positive = current > baseline."""
     test_name: str
+    """The test used (e.g. ``"Mann-Whitney U"``)."""
     confidence_level: float
+    """The confidence level (default 0.95)."""
 
     @property
     def alpha(self) -> float:
@@ -109,7 +106,7 @@ def mann_whitney_compare(
         raise InsufficientSamplesError("current", len(current_samples), minimum_samples)
 
     alpha = 1.0 - confidence
-    _, p_value_raw = stats.mannwhitneyu(
+    _, p_value_raw = sp.stats.mannwhitneyu(
         current_samples,
         baseline_samples,
         alternative="greater",

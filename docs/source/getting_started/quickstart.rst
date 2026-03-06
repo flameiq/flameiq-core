@@ -67,7 +67,7 @@ Write your benchmark results as a FlameIQ v1 JSON file:
    }
 
 Save this as ``benchmark.json``. For pytest-benchmark, see
-:ref:`providers-pytest-benchmark`.
+:doc:`../guides/custom_provider`
 
 Validate the file before using it:
 

@@ -67,19 +67,19 @@ FlameIQ applies direction-aware logic for known metrics:
      - Regression when…
      - Example threshold
    * - ``latency.*``
-     - change_percent > +threshold
+     - ``change_percent`` > +threshold
      - ``10%``
    * - ``memory_mb``
-     - change_percent > +threshold
+     - ``change_percent`` > +threshold
      - ``8%``
    * - ``cpu_percent``
-     - change_percent > +threshold
+     - ``change_percent`` > +threshold
      - ``10%``
    * - ``throughput``
-     - change_percent < −|threshold|
+     - ``change_percent`` < -|threshold|
      - ``-5%`` or ``5%``
    * - ``custom.*``
-     - |change_percent| > |threshold|
+     - abs(``change_percent``) > abs(threshold)
      - ``5%``
 
 The default threshold is **10%** for any metric not explicitly configured.
