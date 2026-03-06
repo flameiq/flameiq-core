@@ -1,0 +1,35 @@
+# MANIFEST.in
+# Controls what is included in the source distribution (sdist).
+# Binary wheel contents are controlled by pyproject.toml.
+
+# Documentation
+include README.rst
+include CHANGELOG.rst
+include CONTRIBUTING.rst
+include LICENSE
+include SECURITY.md
+
+# Sphinx documentation source
+recursive-include docs/source *.rst *.py *.css *.js *.png *.ico
+
+# Specs (formal algorithm specifications)
+recursive-include specs *.rst *.md
+
+# Type marker
+include flameiq/py.typed
+
+# Exclude build artefacts
+exclude .pre-commit-config.yaml
+exclude .coverage
+prune .coverage_html
+prune docs/build
+prune .mypy_cache
+prune .ruff_cache
+prune dist
+prune build
+global-exclude __pycache__
+global-exclude *.py[cod]
+global-exclude *.so
+global-exclude .DS_Store
+global-exclude .git
+global-exclude *.egg-info

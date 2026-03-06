@@ -1,0 +1,159 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flameiq-core"
+version = "1.0.0"
+description = "Deterministic, CI-native performance regression engine"
+readme = "README.rst"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "Angufibo Lincoln", email = "angufibolinc@gmail.com" },
+]
+keywords = [
+    "performance",
+    "benchmarking",
+    "regression",
+    "ci",
+    "testing",
+    "profiling",
+    "metrics",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Software Development :: Testing",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: System :: Benchmark",
+    "Environment :: Console",
+    "Typing :: Typed",
+]
+requires-python = ">=3.10"
+
+# Runtime dependencies — kept intentionally minimal
+dependencies = [
+    "click>=8.1",
+    "scipy>=1.10",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.4",
+    "mypy>=1.8",
+    "pre-commit>=3.6",
+    "build>=1.0",
+    "twine>=5.0",
+]
+test = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "pytest-xdist>=3.5",
+    "hypothesis>=6.100",
+]
+docs = [
+    "sphinx>=7.3",
+    "sphinx-rtd-theme>=2.0",
+    "sphinxcontrib-napoleon>=0.7",
+    "sphinx-copybutton>=0.5",
+]
+
+[project.scripts]
+flameiq = "flameiq.cli.main:main"
+
+[project.urls]
+Homepage      = "https://flameiq.dev"
+Documentation = "https://docs.flameiq.dev"
+Repository    = "https://github.com/flameiq/flameiq-core"
+"Bug Tracker" = "https://github.com/flameiq/flameiq-core/issues"
+Changelog     = "https://github.com/flameiq/flameiq-core/blob/main/CHANGELOG.rst"
+
+# ── Package discovery ─────────────────────────────────────────────────────────
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["flameiq*"]
+exclude = ["tests*", "docs*", "examples*", "specs*", "scripts*"]
+
+[tool.setuptools.package-data]
+"flameiq" = ["py.typed"]
+
+# ── Ruff — linting & formatting ───────────────────────────────────────────────
+[tool.ruff]
+line-length    = 100
+target-version = "py310"
+src            = ["."]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "C4", "SIM", "TCH", "ANN", "D"]
+ignore = [
+    "ANN101", "ANN102", "ANN401",
+    "D100",   # Missing docstring in public module
+    "D104",   # Missing docstring in public package
+    "D203",   # one-blank-line-before-class (conflicts with D211)
+    "D213",   # multi-line-summary-second-line (conflicts with D212)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**"  = ["ANN", "D", "S101", "TCH003"]
+"examples/**" = ["ANN", "D"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+# ── mypy — strict type checking ───────────────────────────────────────────────
+[tool.mypy]
+python_version         = "3.10"
+strict                 = true
+warn_return_any        = true
+warn_unused_configs    = true
+ignore_missing_imports = true
+explicit_package_bases = true
+
+[[tool.mypy.overrides]]
+module = ["scipy.*", "tests.*", "flameiq.cli.*"]
+ignore_missing_imports = true
+ignore_errors = true
+disable_error_code = ["misc"]
+
+# ── pytest ────────────────────────────────────────────────────────────────────
+[tool.pytest.ini_options]
+testpaths      = ["tests"]
+python_files   = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts        = "-v --tb=short --strict-markers -q"
+markers = [
+    "unit: Unit tests — fast, isolated, no I/O",
+    "integration: Integration tests — may use temp filesystem",
+    "statistical: Statistical algorithm correctness tests",
+    "determinism: Verifies determinism guarantees",
+    "slow: Intentionally slow tests",
+]
+
+# ── coverage ──────────────────────────────────────────────────────────────────
+[tool.coverage.run]
+source        = ["flameiq"]
+branch        = true
+omit          = ["tests/*", "*/migrations/*"]
+
+[tool.coverage.report]
+fail_under    = 85
+show_missing  = true
+skip_covered  = false
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.coverage.html]
+directory = ".coverage_html"
