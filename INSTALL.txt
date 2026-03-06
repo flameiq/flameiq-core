@@ -1,0 +1,54 @@
+FlameIQ Core v1.0.0 — Installation & Publishing Guide
+======================================================
+
+CONTENTS OF THIS PACKAGE
+--------------------------
+  flameiq-core/                    ← Full source code (for development)
+  dist/
+    flameiq_core-1.0.0-py3-none-any.whl   ← Python wheel (for pip install)
+    flameiq-core-1.0.0.tar.gz             ← Source distribution (for PyPI)
+
+
+INSTALL LOCALLY (from wheel)
+------------------------------
+  pip install dist/flameiq_core-1.0.0-py3-none-any.whl
+  flameiq --version
+
+
+INSTALL IN DEVELOPMENT MODE
+-----------------------------
+  cd flameiq-core/
+  pip install -e ".[dev,test,docs]"
+  make check
+
+
+PUBLISH TO PyPI
+----------------
+  1. Install twine (if not installed):
+       pip install twine
+
+  2. Upload to TestPyPI first (recommended):
+       python -m twine upload --repository testpypi dist/*
+
+  3. Verify install from TestPyPI:
+       pip install --index-url https://test.pypi.org/simple/ flameiq-core
+
+  4. Upload to production PyPI:
+       python -m twine upload dist/*
+
+  You will be prompted for your PyPI username and password (or API token).
+  For API token auth, use:
+       username: __token__
+       password: pypi-<your-api-token>
+
+
+VERIFY THE DISTRIBUTIONS
+--------------------------
+  python -m twine check dist/*
+
+
+QUICK VERIFICATION
+-------------------
+  pip install dist/flameiq_core-1.0.0-py3-none-any.whl
+  flameiq --version
+  flameiq --help
