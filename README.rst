@@ -2,7 +2,6 @@ FlameIQ
 =======
 
 .. image:: https://raw.githubusercontent.com/flameiq/flameiq-core/main/assets/flameiq-logo.png
-   :alt: FlameIQ Logo
    :width: 200px
    :align: center
 
@@ -19,10 +18,6 @@ FlameIQ
 .. image:: https://img.shields.io/badge/license-Apache%202.0-blue.svg
    :target: https://github.com/flameiq/flameiq-core/blob/main/LICENSE
    :alt: License
-
-.. image:: https://img.shields.io/badge/CI-passing-brightgreen.svg
-   :target: https://github.com/flameiq/flameiq-core/actions
-   :alt: CI
 
 **Deterministic, CI-native performance regression and evolution engine.**
 
