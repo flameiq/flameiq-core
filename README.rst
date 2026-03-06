@@ -1,12 +1,15 @@
 FlameIQ
 =======
 
-.. image:: https://raw.githubusercontent.com/flameiq/flameiq-core/main/assets/flameiq-logo.png
-   :alt: FlameIQ Logo
-   :width: 200px
-   :align: center
+.. raw:: html
 
-|
+   <p align="center">
+     <img src="https://raw.githubusercontent.com/flameiq/flameiq-core/main/assets/flameiq-logo.png" width="200">
+   </p>
+
+.. raw:: html
+
+   <p align="center">
 
 .. image:: https://img.shields.io/pypi/v/flameiq-core.svg
    :target: https://pypi.org/project/flameiq-core/
@@ -23,6 +26,10 @@ FlameIQ
 .. image:: https://img.shields.io/badge/CI-passing-brightgreen.svg
    :target: https://github.com/flameiq/flameiq-core/actions
    :alt: CI
+
+.. raw:: html
+
+   </p>
 
 **Deterministic, CI-native performance regression and evolution engine.**
 
