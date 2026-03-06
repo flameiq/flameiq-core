@@ -6,11 +6,11 @@ import sys
 sys.path.insert(0, os.path.abspath("../.."))
 
 # ── Project ───────────────────────────────────────────────────────────────────
-project   = "FlameIQ"
+project = "FlameIQ"
 copyright = "2026, FlameIQ Contributors"
-author    = "FlameIQ Contributors"
-release   = "1.0.0"
-version   = "1.0"
+author = "FlameIQ Contributors"
+release = "1.0.0"
+version = "1.0"
 
 # ── Extensions ────────────────────────────────────────────────────────────────
 extensions = [
@@ -23,13 +23,13 @@ extensions = [
 ]
 
 # ── Source ────────────────────────────────────────────────────────────────────
-templates_path   = ["_templates"]
+templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
-source_suffix    = ".rst"
-master_doc       = "index"
+source_suffix = ".rst"
+master_doc = "index"
 
 # ── HTML Output ───────────────────────────────────────────────────────────────
-html_theme       = "sphinx_rtd_theme"
+html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
 
 html_theme_options = {
@@ -50,8 +50,8 @@ html_context = {
     "conf_py_path": "/docs/source/",
 }
 
-html_show_sourcelink  = True
-html_show_sphinx      = True
+html_show_sourcelink = True
+html_show_sphinx = True
 
 # ── autodoc ───────────────────────────────────────────────────────────────────
 autodoc_default_options = {
@@ -62,18 +62,18 @@ autodoc_default_options = {
     "show-inheritance": True,
     "inherited-members": False,
 }
-autodoc_typehints           = "description"
-autodoc_typehints_format    = "short"
-autoclass_content           = "both"
+autodoc_typehints = "description"
+autodoc_typehints_format = "short"
+autoclass_content = "both"
 
 # ── Napoleon (Google-style docstrings) ────────────────────────────────────────
-napoleon_google_docstring        = True
-napoleon_numpy_docstring         = False
-napoleon_include_init_with_doc   = True
+napoleon_google_docstring = True
+napoleon_numpy_docstring = False
+napoleon_include_init_with_doc = True
 napoleon_include_private_with_doc = False
 napoleon_include_special_with_doc = True
 napoleon_use_admonition_for_examples = True
-napoleon_use_admonition_for_notes    = True
+napoleon_use_admonition_for_notes = True
 
 # ── intersphinx ───────────────────────────────────────────────────────────────
 intersphinx_mapping = {

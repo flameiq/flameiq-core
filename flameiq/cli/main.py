@@ -50,7 +50,7 @@ def _setup_logging(verbose: bool) -> None:
 )
 @click.pass_context
 def cli(ctx: click.Context, verbose: bool, config: str) -> None:
-    """FlameIQ — deterministic, CI-native performance regression engine.
+    r"""FlameIQ — deterministic, CI-native performance regression engine.
 
     \b
     Make performance a first-class, enforceable engineering signal.

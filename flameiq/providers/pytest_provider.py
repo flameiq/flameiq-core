@@ -56,18 +56,22 @@ class PytestBenchmarkProvider(MetricProvider):
 
     @property
     def name(self) -> str:
+        """Return the unique provider name."""
         return "pytest-benchmark"
 
     def collect(self, source: str) -> dict[str, Any]:
+        """Collect raw metrics data from a pytest-benchmark JSON file."""
         path = Path(source)
         if not path.exists():
             raise MetricsFileNotFoundError(source)
         try:
-            return json.loads(path.read_text(encoding="utf-8"))
+            result: dict[str, Any] = json.loads(path.read_text(encoding="utf-8"))
         except json.JSONDecodeError as exc:
             raise ProviderError(f"Invalid JSON in '{source}': {exc}") from exc
+        return result
 
     def validate(self, raw: dict[str, Any]) -> bool:
+        """Check if *raw* data has the expected pytest-benchmark structure."""
         return (
             isinstance(raw, dict)
             and "benchmarks" in raw
@@ -76,6 +80,10 @@ class PytestBenchmarkProvider(MetricProvider):
         )
 
     def normalize(self, raw: dict[str, Any]) -> PerformanceSnapshot:
+        """Parse *raw* pytest-benchmark data into a ``PerformanceSnapshot``.
+
+        Full type: :class:`~flameiq.schema.v1.models.PerformanceSnapshot`.
+        """
         benchmarks: list[dict[str, Any]] = raw.get("benchmarks", [])
         if not benchmarks:
             raise ProviderError("pytest-benchmark output contains no benchmarks.")

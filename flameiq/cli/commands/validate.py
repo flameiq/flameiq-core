@@ -29,7 +29,7 @@ def validate(
     show_providers: bool,
     as_json: bool,
 ) -> None:
-    """Validate a metrics file against the FlameIQ v1 schema.
+    r"""Validate a metrics file against the FlameIQ v1 schema.
 
     \b
     Exit codes:

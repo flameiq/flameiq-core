@@ -36,7 +36,7 @@ def report(
     provider: str,
     output: str,
 ) -> None:
-    """Generate a self-contained HTML performance comparison report.
+    r"""Generate a self-contained HTML performance comparison report.
 
     \b
     Exit codes:

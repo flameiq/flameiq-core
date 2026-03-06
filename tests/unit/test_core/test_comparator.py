@@ -12,7 +12,7 @@ from flameiq.core.thresholds import (
     evaluate_threshold,
     parse_threshold,
 )
-from tests.fixtures.test_fixtures import BASELINE, PASSING, REGRESSION, make_snapshot
+from tests.fixtures.test_fixtures import BASELINE, PASSING, REGRESSION
 
 pytestmark = pytest.mark.unit
 
@@ -159,13 +159,12 @@ class TestCompareSnapshots:
         assert d["exit_code"] == 1
 
     def test_missing_metric_in_current_skipped(self):
-        from flameiq.schema.v1.models import LatencyMetrics, Metrics
-
-        # current has no throughput
-        current = make_snapshot(commit="x")
-        current.metrics.__class__  # it has throughput by default
-        # Now make one without throughput
-        from flameiq.schema.v1.models import PerformanceSnapshot, SnapshotMetadata
+        from flameiq.schema.v1.models import (
+            LatencyMetrics,
+            Metrics,
+            PerformanceSnapshot,
+            SnapshotMetadata,
+        )
 
         partial = PerformanceSnapshot(
             metadata=SnapshotMetadata(commit="partial"),
@@ -184,6 +183,6 @@ class TestCompareSnapshots:
             assert r.status == first.status
             assert r.exit_code == first.exit_code
             assert len(r.diffs) == len(first.diffs)
-            for d1, d2 in zip(first.diffs, r.diffs):
+            for d1, d2 in zip(first.diffs, r.diffs, strict=False):
                 assert d1.change_percent == d2.change_percent
                 assert d1.is_regression == d2.is_regression

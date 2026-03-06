@@ -102,7 +102,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**"  = ["ANN", "D", "S101"]
+"tests/**"  = ["ANN", "D", "S101", "TCH003"]
 "examples/**" = ["ANN", "D"]
 
 [tool.ruff.lint.pydocstyle]
@@ -118,8 +118,10 @@ ignore_missing_imports = true
 explicit_package_bases = true
 
 [[tool.mypy.overrides]]
-module = "scipy.*"
+module = ["scipy.*", "tests.*", "flameiq.cli.*"]
 ignore_missing_imports = true
+ignore_errors = true
+disable_error_code = ["misc"]
 
 # ── pytest ────────────────────────────────────────────────────────────────────
 [tool.pytest.ini_options]

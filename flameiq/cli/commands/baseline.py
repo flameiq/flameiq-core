@@ -27,7 +27,7 @@ def baseline() -> None:
 @click.option("--tag", default=None, help="Tag this baseline (e.g. 'v1.0.0').")
 @click.pass_context
 def baseline_set(ctx: click.Context, metrics: str, provider: str, tag: str | None) -> None:
-    """Set a new baseline from a metrics file.
+    r"""Set a new baseline from a metrics file.
 
     \b
     Exit codes:

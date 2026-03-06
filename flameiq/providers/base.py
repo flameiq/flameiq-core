@@ -90,7 +90,9 @@ class MetricProvider(ABC):
 
     @abstractmethod
     def normalize(self, raw: dict[str, Any]) -> PerformanceSnapshot:
-        """Transform validated *raw* data into a :class:`~flameiq.schema.v1.models.PerformanceSnapshot`.
+        """Transform validated *raw* data into a ``PerformanceSnapshot``.
+
+        Full type: :class:`~flameiq.schema.v1.models.PerformanceSnapshot`.
 
         Args:
             raw: Validated dict from :meth:`collect`.

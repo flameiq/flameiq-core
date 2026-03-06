@@ -54,6 +54,7 @@ class SchemaVersionError(ValidationError):
     """
 
     def __init__(self, version: int) -> None:
+        """Initialize the error with the unsupported version number."""
         super().__init__(
             f"Unsupported schema version: {version}. FlameIQ v1.0 supports schema_version 1 only."
         )
@@ -79,6 +80,7 @@ class ThresholdConfigError(ConfigurationError):
     """
 
     def __init__(self, key: str, value: str, reason: str) -> None:
+        """Initialize the error with the invalid threshold details."""
         super().__init__(f"Invalid threshold for '{key}: {value}' — {reason}")
         self.key = key
         self.value = value
@@ -101,6 +103,7 @@ class BaselineNotFoundError(BaselineError):
     """
 
     def __init__(self, path: str) -> None:
+        """Initialize the error with the expected baseline path."""
         super().__init__(
             f"No baseline found at '{path}'. Run: flameiq baseline set --metrics <file>"
         )
@@ -116,6 +119,7 @@ class BaselineCorruptedError(BaselineError):
     """
 
     def __init__(self, path: str, reason: str) -> None:
+        """Initialize the error with the corrupted file details."""
         super().__init__(f"Baseline at '{path}' is corrupted: {reason}")
         self.path = path
 
@@ -137,6 +141,7 @@ class ProviderNotFoundError(ProviderError):
     """
 
     def __init__(self, name: str) -> None:
+        """Initialize the error with the missing provider name."""
         super().__init__(
             f"Provider '{name}' is not registered. Use: flameiq validate --list-providers"
         )
@@ -151,6 +156,7 @@ class MetricsFileNotFoundError(ProviderError):
     """
 
     def __init__(self, path: str) -> None:
+        """Initialize the error with the missing file path."""
         super().__init__(f"Metrics file not found: '{path}'")
         self.path = path
 
@@ -174,6 +180,7 @@ class InsufficientSamplesError(ComparisonError):
     """
 
     def __init__(self, metric: str, got: int, required: int) -> None:
+        """Initialize the error with the insufficient samples details."""
         super().__init__(
             f"Insufficient samples for '{metric}': "
             f"got {got}, need at least {required} for statistical comparison."

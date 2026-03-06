@@ -38,7 +38,7 @@ def run(
     output: str | None,
     as_json: bool,
 ) -> None:
-    """Load and validate a metrics snapshot.
+    r"""Load and validate a metrics snapshot.
 
     \b
     Exit codes:

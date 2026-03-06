@@ -11,10 +11,11 @@ Produces a fully self-contained, offline-capable HTML report.
 from __future__ import annotations
 
 from datetime import datetime, timezone
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from pathlib import Path
+
     from flameiq.core.models import ComparisonResult
     from flameiq.schema.v1.models import PerformanceSnapshot
 
@@ -183,8 +184,9 @@ def _render(
 <body>
 
 <header>
-  <h1>🔥 FlameIQ Performance Report</h1>
-  <p>Generated {ts} &nbsp;·&nbsp; FlameIQ v{_VERSION} &nbsp;·&nbsp; Deterministic · CI-Native · Offline-First</p>
+  <h1>FlameIQ Performance Report</h1>
+  <p>Generated {ts} &nbsp;·&nbsp; FlameIQ v{_VERSION}
+  &nbsp;·&nbsp; Deterministic · CI-Native · Offline-First</p>
 </header>
 
 <div class="banner">

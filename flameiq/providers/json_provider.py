@@ -25,18 +25,22 @@ class JsonProvider(MetricProvider):
 
     @property
     def name(self) -> str:
+        """Return the unique provider name."""
         return "json"
 
     def collect(self, source: str) -> dict[str, Any]:
+        """Collect raw metrics data from a JSON file."""
         path = Path(source)
         if not path.exists():
             raise MetricsFileNotFoundError(source)
         try:
-            return json.loads(path.read_text(encoding="utf-8"))
+            result: dict[str, Any] = json.loads(path.read_text(encoding="utf-8"))
         except json.JSONDecodeError as exc:
             raise ProviderError(f"'{source}' is not valid JSON: {exc}") from exc
+        return result
 
     def validate(self, raw: dict[str, Any]) -> bool:
+        """Check if *raw* data conforms to the FlameIQ v1 schema."""
         return (
             isinstance(raw, dict)
             and raw.get("schema_version") == 1
@@ -45,6 +49,7 @@ class JsonProvider(MetricProvider):
         )
 
     def normalize(self, raw: dict[str, Any]) -> PerformanceSnapshot:
+        """Parse *raw* data into a :class:`~flameiq.schema.v1.models.PerformanceSnapshot`."""
         try:
             return PerformanceSnapshot.from_dict(raw)
         except Exception as exc:

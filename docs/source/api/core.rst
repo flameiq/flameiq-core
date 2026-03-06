@@ -14,7 +14,6 @@ Models
 
 .. automodule:: flameiq.core.models
    :members:
-   :undoc-members:
 
 Thresholds
 ----------

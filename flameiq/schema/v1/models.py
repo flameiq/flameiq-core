@@ -63,6 +63,7 @@ class LatencyMetrics:
     p99: float | None = None
 
     def __post_init__(self) -> None:
+        """Validate that at least one latency metric is provided and all are non-negative."""
         if all(v is None for v in (self.mean, self.p50, self.p95, self.p99)):
             raise ValueError("LatencyMetrics requires at least one value (mean, p50, p95, or p99).")
         for name, val in (
@@ -71,7 +72,7 @@ class LatencyMetrics:
             ("p95", self.p95),
             ("p99", self.p99),
         ):
-            if val is not None and (not isinstance(val, (int, float)) or val < 0):
+            if val is not None and (not isinstance(val, int | float) or val < 0):
                 raise ValueError(
                     f"LatencyMetrics.{name} must be a non-negative number, got {val!r}"
                 )
@@ -98,6 +99,7 @@ class Metrics:
     custom: dict[str, float] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
+        """Validate that at least one metric is provided and all numeric values are non-negative."""
         has_std = any(
             [
                 self.latency is not None,
@@ -195,6 +197,7 @@ class PerformanceSnapshot:
     metadata: SnapshotMetadata = field(default_factory=SnapshotMetadata)
 
     def __post_init__(self) -> None:
+        """Validate that the snapshot conforms to the expected schema version."""
         if self.schema_version != 1:
             raise ValueError(
                 f"Unsupported schema_version: {self.schema_version!r}. "

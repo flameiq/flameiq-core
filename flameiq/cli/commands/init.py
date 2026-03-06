@@ -45,7 +45,7 @@ _GITIGNORE_BLOCK = "\n# FlameIQ — do not commit baselines\n.flameiq/baselines/
 @click.option("--force", "-f", is_flag=True, default=False, help="Overwrite existing flameiq.yaml.")
 @click.pass_context
 def init(ctx: click.Context, force: bool) -> None:
-    """Initialise FlameIQ in the current project.
+    r"""Initialise FlameIQ in the current project.
 
     Creates flameiq.yaml and the .flameiq/ storage directory.
     Updates .gitignore if present.

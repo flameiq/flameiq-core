@@ -31,29 +31,26 @@ class RegressionStatus(str, Enum):
 
 @dataclass(frozen=True)
 class MetricDiff:
-    """The computed difference for a single metric key.
-
-    Attributes:
-        metric_key:        Dotted key, e.g. ``"latency.p95"``.
-        baseline_value:    The reference measurement.
-        current_value:     The current measurement.
-        change_percent:    Signed % change. Positive = current is larger.
-        threshold_percent: Configured allowance for this metric.
-        is_regression:     Whether the threshold was exceeded.
-        is_warning:        Within threshold but approaching the limit.
-        p_value:           Statistical p-value (if statistical mode used).
-        effect_size:       Cohen's d (if statistical mode used).
-    """
+    """The computed difference for a single metric key."""
 
     metric_key: str
+    """Dotted key, e.g. ``"latency.p95"``."""
     baseline_value: float
+    """The reference measurement."""
     current_value: float
+    """The current measurement."""
     change_percent: float
+    """Signed % change. Positive = current is larger."""
     threshold_percent: float
+    """Configured allowance for this metric."""
     is_regression: bool
+    """Whether the threshold was exceeded."""
     is_warning: bool = False
+    """Within threshold but approaching the limit."""
     p_value: float | None = None
+    """Statistical p-value (if statistical mode used)."""
     effect_size: float | None = None
+    """Cohen's d (if statistical mode used)."""
 
     @property
     def direction(self) -> str:
@@ -81,23 +78,20 @@ class MetricDiff:
 
 @dataclass(frozen=True)
 class ComparisonResult:
-    """The complete result of a baseline-vs-current comparison.
-
-    Attributes:
-        status:           Overall pass/regression/warning outcome.
-        diffs:            Per-metric differences, in metric-key order.
-        baseline_commit:  Git SHA of the baseline snapshot, if available.
-        current_commit:   Git SHA of the current snapshot, if available.
-        statistical_mode: Whether the Mann-Whitney U test was applied.
-        summary:          Optional human-readable summary string.
-    """
+    """The complete result of a baseline-vs-current comparison."""
 
     status: RegressionStatus
+    """Overall pass/regression/warning outcome."""
     diffs: list[MetricDiff] = field(default_factory=list)
+    """Per-metric differences, in metric-key order."""
     baseline_commit: str | None = None
+    """Git SHA of the baseline snapshot, if available."""
     current_commit: str | None = None
+    """Git SHA of the current snapshot, if available."""
     statistical_mode: bool = False
+    """Whether the Mann-Whitney U test was applied."""
     summary: str | None = None
+    """Optional human-readable summary string."""
 
     @property
     def regressions(self) -> list[MetricDiff]:
@@ -123,7 +117,7 @@ class ComparisonResult:
         """
         return 1 if self.status == RegressionStatus.REGRESSION else 0
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, object]:
         """Serialise to a plain dict (e.g. for ``--json`` CLI output)."""
         return {
             "status": self.status.value,

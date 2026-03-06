@@ -51,6 +51,7 @@ class BaselineStore:
     """
 
     def __init__(self, root: Path | None = None) -> None:
+        """Initialize the store with the given root path."""
         self._root = (root or Path(".flameiq")).resolve()
         self._dir = self._root / "baselines"
 
@@ -147,7 +148,9 @@ class BaselineStore:
         return snapshots
 
     def clear(self) -> None:
-        """Delete all stored baselines and history. **Destructive.**
+        """Delete all stored baselines and history.
+
+        .. warning:: Destructive — this cannot be undone.
 
         Raises:
             :class:`~flameiq.core.errors.StorageError`: On deletion failure.

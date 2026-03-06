@@ -51,7 +51,7 @@ def compare(
     as_json: bool,
     threshold: tuple[str, ...],
 ) -> None:
-    """Compare the current metrics against the stored baseline.
+    r"""Compare the current metrics against the stored baseline.
 
     \b
     Exit codes:
@@ -61,7 +61,7 @@ def compare(
       3  Metrics file error.
     """
     # Parse inline threshold overrides
-    threshold_config: dict[str, str] = {}
+    threshold_config: dict[str, str | float] = {}
     for t in threshold:
         if "=" not in t:
             _err(as_json, f"Invalid --threshold format '{t}'. Use KEY=VALUE.")
