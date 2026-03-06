@@ -76,7 +76,7 @@ FlameIQ applies direction-aware logic for known metrics:
      - ``change_percent`` > +threshold
      - ``10%``
    * - ``throughput``
-     - ``change_percent`` < -|threshold|
+     - ``change_percent`` < -(threshold)
      - ``-5%`` or ``5%``
    * - ``custom.*``
      - abs(``change_percent``) > abs(threshold)

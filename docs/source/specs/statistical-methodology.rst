@@ -1,4 +1,4 @@
-.. _statistical_methodology:
+.. _statistical-methodology:
 
 Statistical Methodology Specification
 =======================================
