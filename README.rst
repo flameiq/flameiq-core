@@ -48,26 +48,28 @@ checkers bring to correctness: **automated, deterministic, CI-enforced**.
 Design Principles
 -----------------
 
-+--------------------+------------------------------------------------------+
-| Principle          | What it means                                        |
-+====================+======================================================+
-| Deterministic      | Same input → same output, always. No flakiness.     |
-+--------------------+------------------------------------------------------+
-| CI-native          | Exit codes, JSON output, works in any pipeline.     |
-+--------------------+------------------------------------------------------+
-| Offline-first      | No network calls. No telemetry. Air-gap ready.      |
-+--------------------+------------------------------------------------------+
-| Language-agnostic  | Provider plugin system. Any tool, any language.     |
-+--------------------+------------------------------------------------------+
-| Statistically      | Optional Mann-Whitney U test with effect size.      |
-| grounded           |                                                      |
-+--------------------+------------------------------------------------------+
-| Auditable          | Math documented in ``/specs``. No black boxes.      |
-+--------------------+------------------------------------------------------+
-| Vendor-neutral     | No cloud lock-in. Your data stays local.            |
-+--------------------+------------------------------------------------------+
-| Extensible         | Stable plugin SDK. Easy to add new providers.       |
-+--------------------+------------------------------------------------------+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Principle
+     - What it means
+   * - Deterministic
+     - Same input → same output, always. No flakiness.
+   * - CI-native
+     - Exit codes, JSON output, works in any pipeline.
+   * - Offline-first
+     - No network calls. No telemetry. Air-gap ready.
+   * - Language-agnostic
+     - Provider plugin system. Any tool, any language.
+   * - Statistically grounded
+     - Optional Mann-Whitney U test with effect size.
+   * - Auditable
+     - Math documented in ``/specs``. No black boxes.
+   * - Vendor-neutral
+     - No cloud lock-in. Your data stays local.
+   * - Extensible
+     - Stable plugin SDK. Easy to add new providers.
 
 
 Installation

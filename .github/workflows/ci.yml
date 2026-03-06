@@ -45,6 +45,7 @@ jobs:
         run: python -m mypy flameiq/
 
       - name: Run tests
+        shell: bash
         run: |
           python -m pytest tests/ \
             --cov=flameiq \
