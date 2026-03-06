@@ -17,6 +17,11 @@ FlameIQ
    :target: https://github.com/flameiq/flameiq-core/actions
    :alt: CI
 
+.. image:: https://raw.githubusercontent.com/flameiq/flameiq-core/main/assets/flameiq-logo.png
+   :alt: FlameIQ Logo
+   :width: 200px
+   :align: center
+
 **Deterministic, CI-native performance regression and evolution engine.**
 
 Make performance a first-class, enforceable engineering signal —
