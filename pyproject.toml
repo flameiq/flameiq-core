@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "flameiq-core"
-version = "1.0.1"
+version = "1.0.2"
 description = "Deterministic, CI-native performance regression engine"
 readme = "README.rst"
 license = { text = "Apache-2.0" }
