@@ -58,3 +58,5 @@ docs/build/
 # OS
 .DS_Store
 Thumbs.db
+
+.pypirc

@@ -231,15 +231,15 @@ Configuration
 Documentation
 -------------
 
-Full documentation: https://docs.flameiq.dev
+Full documentation: https://flameiq-core.readthedocs.io
 
-- `Installation Guide <https://docs.flameiq.dev/getting_started/installation.html>`_
-- `Quick Start <https://docs.flameiq.dev/getting_started/quickstart.html>`_
-- `CLI Reference <https://docs.flameiq.dev/cli/reference.html>`_
-- `Configuration Reference <https://docs.flameiq.dev/guides/configuration.html>`_
-- `Statistical Methodology Specification <https://docs.flameiq.dev/specs/statistical-methodology.html>`_
-- `Schema v1 Specification <https://docs.flameiq.dev/specs/schema-v1.html>`_
-- `Custom Provider Guide <https://docs.flameiq.dev/guides/custom-provider.html>`_
+- `Installation Guide <https://flameiq-core.readthedocs.io/en/latest/getting_started/installation.html>`_
+- `Quick Start <https://flameiq-core.readthedocs.io/en/latest/getting_started/quickstart.html>`_
+- `CLI Reference <https://flameiq-core.readthedocs.io/en/latest/cli/reference.html>`_
+- `Configuration Reference <https://flameiq-core.readthedocs.io/en/latest/guides/configuration.html>`_
+- `Statistical Methodology <https://flameiq-core.readthedocs.io/en/latest/specs/statistical-methodology.html>`_
+- `Schema v1 Specification <https://flameiq-core.readthedocs.io/en/latest/specs/schema-v1.html>`_
+- `Custom Provider Guide <https://flameiq-core.readthedocs.io/en/latest/guides/custom_provider.html>`_
 
 
 Contributing
