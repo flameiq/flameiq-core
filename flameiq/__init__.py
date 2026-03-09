@@ -26,7 +26,7 @@ Quickstart::
 
 """
 
-__version__ = "1.0.2"
+__version__ = "2.0.0-dev"
 __author__ = "FlameIQ Core Team"
 __license__ = "Apache-2.0"
 __url__ = "https://github.com/flameiq/flameiq-core"
