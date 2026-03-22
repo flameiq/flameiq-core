@@ -16,12 +16,10 @@ from __future__ import annotations
 
 import json
 import sys
-from typing import cast
 
 import click
 
 from flameiq.v2.config import load_config_v2
-from flameiq.v2.schema import RunV2
 from flameiq.v2.storage.history import BaselineStoreV2, HistoryStore, rolling_median_baseline
 
 
@@ -77,7 +75,8 @@ def baseline_set(
         baseline_result = rolling_median_baseline(history, window=resolved_window)
         if baseline_result is None:
             _err(json_output, "Could not compute rolling median — insufficient data.", 3)
-        baseline = cast(RunV2, baseline_result)
+        assert baseline_result is not None
+        baseline = baseline_result
         source = f"rolling median of {min(len(history), resolved_window)} runs"
 
     path = baseline_store.save(baseline, name=name)
