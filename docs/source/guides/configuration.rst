@@ -25,15 +25,40 @@ Complete example
      cpu_percent:   10%
      custom.score:   5%    # User-defined metric
 
+   # ── Performance Budgets (v2 only) ────────────────────────────────────────
+   # Absolute ceilings — exit code 4 if exceeded (SLO enforcement)
+   budgets:
+     latency.p95:  200      # never exceed 200ms p95
+     memory_mb:   1024      # never exceed 1GB
+
    # ── Baseline Management ──────────────────────────────────────────────────
    baseline:
      strategy: rolling_median    # last_successful | rolling_median | tagged
      rolling_window: 5           # Used only with rolling_median
+     name: main                  # named baseline to use (v2 only)
 
    # ── Statistical Significance Testing ────────────────────────────────────
    statistics:
      enabled: false              # Enable Mann-Whitney U test
      confidence: 0.95            # 95% confidence level
+     noise_tolerance: 0.5        # % band to absorb benchmark noise (v2 only)
+
+  # ── Drift Detection (v2 only) ────────────────────────────────────────────
+   drift:
+     enabled: true
+     threshold_percent: 5.0      # cumulative % change to flag drift
+     min_runs: 5                 # minimum runs before flagging
+     window: 30                  # look-back window in runs
+
+   # ── Correlation Analysis (v2 only) ───────────────────────────────────────
+   correlation:
+     enabled: true
+     change_threshold: 5.0       # minimum % change to consider correlated
+
+   # ── Run History (v2 only) ────────────────────────────────────────────────
+   history:
+     backend: sqlite             # sqlite | jsonl
+     max_runs: 500
 
    # ── Noise Handling ───────────────────────────────────────────────────────
    noise:
@@ -53,6 +78,8 @@ a regression. They are percent strings with an optional sign:
    thresholds:
      latency.p95: 10%     # ← positive: allow up to 10% increase
      throughput:  -5%     # ← negative: allow up to 5% decrease
+
+See :ref:`spec_threshold_algorithm` for the full specification.
 
 Direction semantics
 ~~~~~~~~~~~~~~~~~~~
@@ -196,3 +223,47 @@ directory. Override with the global ``--config`` option:
 .. code-block:: bash
 
    flameiq --config path/to/custom.yaml compare --metrics metrics.json
+
+Budgets (v2 only)
+-----------------
+
+Budgets enforce **absolute ceilings** rather than relative changes.
+A budget breach exits with code ``4`` regardless of the threshold result.
+
+.. code-block:: yaml
+
+   budgets:
+     latency.p95:  200    # fail if p95 exceeds 200ms
+     memory_mb:   1024    # fail if memory exceeds 1024MB
+
+Use budgets for SLO enforcement — a hard limit that must never be
+crossed regardless of how good the baseline is.
+
+Drift configuration (v2 only)
+------------------------------
+
+.. code-block:: yaml
+
+   drift:
+     enabled: true
+     threshold_percent: 5.0   # flag if cumulative change ≥ 5%
+     min_runs: 5               # require at least 5 runs
+     window: 30                # analyze last 30 runs
+
+Drift is flagged when **both** conditions are true:
+
+1. Cumulative change ≥ ``threshold_percent``
+2. Linear fit R² ≥ 0.30 (trend is real, not noise)
+
+Correlation configuration (v2 only)
+-------------------------------------
+
+.. code-block:: yaml
+
+   correlation:
+     enabled: true
+     change_threshold: 5.0   # only consider metrics that changed ≥ 5%
+
+When regressions are detected, FlameIQ applies a rule-based correlation
+table to identify the primary driver (e.g. CPU increase causing latency
+increase). This is deterministic and auditable — not AI.

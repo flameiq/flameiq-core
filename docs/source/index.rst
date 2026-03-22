@@ -24,10 +24,33 @@ requiring any SaaS platform, cloud account, or vendor dependency.
    flameiq baseline set --metrics benchmark.json
    flameiq compare --metrics current.json --fail-on-regression
 
+   # v2 — performance evolution intelligence
+   flameiq v2 run --metrics benchmark.json
+   flameiq v2 baseline set
+   flameiq v2 compare
+   flameiq v2 trend --metric latency.p95 --last 30
+   flameiq v2 drift
+   flameiq v2 report
+
 .. note::
 
    FlameIQ OSS requires **no internet connection**, **no account**, and **no
    API keys**. It is fully offline and air-gap compatible.
+
+What is new in v2
+-----------------
+
+FlameIQ v2 extends v1 with a full performance evolution layer:
+
+- **Persistent run history** — every run stored locally in SQLite
+- **Drift detection** — catches gradual degradation across many commits
+- **Time-travel comparison** — compare any two commits directly
+- **Performance budgets** — enforce absolute metric ceilings (SLO enforcement)
+- **Correlation analysis** — rule-based multi-metric cause-effect detection
+- **Rich HTML reports** — trend charts, drift visualization, run history
+- **Named baselines** — multiple named baselines with explicit promotion
+
+v1 commands remain fully supported and backward compatible.
 
 ----
 
@@ -52,6 +75,7 @@ requiring any SaaS platform, cloud account, or vendor dependency.
    :caption: CLI Reference
 
    cli/reference
+   cli/v2_reference
 
 .. toctree::
    :maxdepth: 2
@@ -80,6 +104,10 @@ requiring any SaaS platform, cloud account, or vendor dependency.
    api/storage
    api/providers
    api/reporting
+   api/v2/analysis
+   api/v2/regression
+   api/v2/storage
+   api/v2/statistics
 
 .. toctree::
    :maxdepth: 1
