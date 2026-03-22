@@ -34,6 +34,16 @@ and will never change. CI systems should rely on them unconditionally.
        The metrics file is not valid JSON.
        The provider cannot parse the file format.
        The snapshot fails schema validation.
+     * - ``4``
+     - **BUDGET_BREACH**
+     - An absolute budget ceiling was exceeded. Budget breach takes
+       precedence over threshold regression when both occur.
+       Returned by ``flameiq v2 compare``.
+   * - ``5``
+     - **DRIFT_DETECTED**
+     - Gradual drift detected. Only returned by ``flameiq v2 drift``
+       when ``--fail-on-drift`` is set.
+
 
 Using exit codes in CI
 -----------------------
@@ -44,16 +54,22 @@ Using exit codes in CI
    EXIT=$?
 
    if [ $EXIT -eq 0 ]; then
-     echo "✓ No regressions"
+     echo "No regressions"
    elif [ $EXIT -eq 1 ]; then
-     echo "✗ Regression detected — failing build"
+     echo "Regression detected — failing build"
      exit 1
    elif [ $EXIT -eq 2 ]; then
-     echo "⚠ FlameIQ configuration error"
+     echo "FlameIQ configuration error"
      exit 2
    elif [ $EXIT -eq 3 ]; then
-     echo "⚠ Metrics file error"
+     echo "Metrics file error"
      exit 3
+   elif [$EXIT -eq 4 ]; then
+      echo "Budget breach — SLO ceiling exceeded"
+      exit 4
+   elif [ $EXIT -eq 5]; then
+      echo "Drift detected"
+      exit 5
    fi
 
 Using JSON output with exit codes

@@ -109,6 +109,145 @@ Added
 Unreleased
 ----------
 
+v2 is currently in active development on the ``v2-dev`` branch.
+All v1 commands remain fully supported and backward compatible.
+
+Added
+~~~~~
+
+**Persistent run history**
+
+- SQLite-backed local run history via :class:`~flameiq.v2.storage.history.HistoryStore`
+- JSONL audit sidecar (``runs.jsonl``) alongside SQLite for human inspection
+- ``flameiq v2 run`` — records every run into persistent local history
+- ``flameiq v2 history`` — browse recent runs with branch and commit metadata
+
+**Named baseline management**
+
+- :class:`~flameiq.v2.storage.history.BaselineStoreV2` — named baseline
+  files stored as individual JSON files in ``.flameiq/baselines/``
+- ``flameiq v2 baseline set`` — set a named baseline (default: ``main``)
+- ``flameiq v2 baseline promote`` — explicitly promote one named baseline
+  to another (e.g. ``staging`` → ``main``)
+- ``flameiq v2 baseline list`` — list all saved named baselines
+- ``flameiq v2 baseline show`` — inspect metrics in a named baseline
+- ``flameiq v2 baseline delete`` — delete a named baseline
+- No auto-promotion — all baseline changes are explicit (trust through
+  explicitness)
+
+**Drift detection**
+
+- :class:`~flameiq.v2.analysis.engine.DriftAnalyzer` — linear regression
+  on time series to detect gradual performance degradation
+- Catches slow regressions that never trigger single-run thresholds
+  (e.g. +1% latency per commit for 20 commits = +20% cumulative)
+- Drift flagged when: cumulative change ≥ threshold AND R² ≥ 0.30
+- ``flameiq v2 drift`` — drift analysis with ``--fail-on-drift`` (exit code 5)
+- Direction-aware: ``worsening`` vs ``improving``
+
+**Trend analysis and time-travel**
+
+- :class:`~flameiq.v2.analysis.engine.TrendAnalyzer` — multi-run trend
+  computation per metric
+- ``flameiq v2 trend --metric latency.p95 --last 30`` — single metric trend
+- ``flameiq v2 trend --from abc123 --to def456`` — time-travel: compare
+  any two commits directly from stored history
+- Overall change, slope per run, R², and per-point change-from-first
+
+**Performance budget enforcement**
+
+- Budget ceilings in ``flameiq.yaml`` under ``budgets:`` block
+- ``latency.p95: 200`` → fail if p95 exceeds 200ms (SLO enforcement)
+- New exit code ``4`` for budget breach (separate from threshold regression)
+- Budget breach takes precedence over threshold regression in exit code
+
+**Correlation analysis**
+
+- :class:`~flameiq.v2.analysis.engine.CorrelationAnalyzer` — rule-based
+  multi-metric cause-effect detection
+- Deterministic rule table (not AI/ML) — transparent and auditable
+- Pearson correlation computed from run history
+- Identifies primary regression driver with human-readable narrative
+- Built-in rules: CPU→latency, memory→latency, throughput→latency
+
+**Statistics engine (stdlib-only)**
+
+- :func:`~flameiq.v2.statistics.engine.mann_whitney_u` — reimplemented
+  from first principles using stdlib only (no scipy dependency in v2)
+- :func:`~flameiq.v2.statistics.engine.bootstrap_mean_ci` — deterministic
+  bootstrap confidence interval (fixed seed = reproducible)
+- :func:`~flameiq.v2.statistics.engine.cohens_d` — standardized effect
+  size with verbal labels
+- :func:`~flameiq.v2.statistics.engine.detect_drift` — linear regression
+  slope detection for drift analysis
+- ``--statistical`` flag on ``flameiq v2 compare`` enables full analysis
+
+**Rich HTML reports**
+
+- :func:`~flameiq.v2.reporting.html_generator.generate_report` — new
+  rich HTML report generator
+- Baseline vs current diff table with color-coded status badges
+- Metric trend charts (Chart.js via CDN, falls back offline)
+- Drift analysis table with direction indicators
+- Correlation findings with Pearson r and narrative
+- Run history table (last 20 runs)
+- Dark theme design with FlameIQ branding
+
+**v2 CLI subgroup**
+
+- All v2 commands accessible under ``flameiq v2 ...``
+- v1 commands unchanged and fully backward compatible
+- ``--json-output`` flag on all v2 commands for machine-readable output
+- ``--no-fail`` flag on ``flameiq v2 compare`` for reporting-only mode
+
+**v2 Configuration (flameiq.yaml)**
+
+New v2 configuration blocks:
+
+.. code-block:: yaml
+
+   history:
+     backend: sqlite
+     max_runs: 500rbitrary
+  key-value metadata
+- :func:`~flameiq.v2.schema.ingest_metrics_file` — universal ingestion
+  function accepting both v1 native format and flat benchmark output
+- Full backward compatibility with v1 JSON snapshots
+
+----
+
+`1.0.2`_ — 2026-03-10
+
+   drift:
+     enabled: true
+     threshold_percent: 5.0
+     min_runs: 5
+     window: 30
+
+   budgets:
+     latency.p95: 200
+     memory_mb: 1024
+
+   statistics:
+     enabled: false
+     confidence: 0.95
+     noise_tolerance: 0.5
+
+   correlation:
+     enabled: true
+     change_threshold: 5.0
+
+   baseline:
+     strategy: rolling_median
+     window: 10
+     name: main
+
+**Schema v2**
+
+- :class:`~flameiq.v2.schema.RunV2` — v2 run schema with extended metadata
+- :class:`~flameiq.v2.schema.MetadataV2` — adds ``tags`` dict for a
+----------------------
+
 Changes to be included in the next release.
 
 .. note::
