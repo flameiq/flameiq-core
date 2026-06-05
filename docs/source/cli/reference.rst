@@ -200,6 +200,26 @@ Mark the latest run as the new baseline. A convenience alias for
 
    flameiq baseline promote
 
+**Exit codes:**
+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 90
+
+   * - Code
+     - Meaning
+   * - ``0``
+     - Pass — all metrics within thresholds
+   * - ``1``
+     - Regression — threshold exceeded
+   * - ``2``
+     - Configuration or baseline error
+   * - ``3``
+     - Invalid or missing metrics file
+
+----
+
+
 flameiq baseline clear
 ~~~~~~~~~~~~~~~~~~~~~~
 
