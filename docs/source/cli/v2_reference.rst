@@ -97,6 +97,26 @@ Promote one named baseline to another name.
 
    flameiq v2 baseline promote staging main
 
+
+**Exit codes:**
+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 90
+
+   * - Code
+     - Meaning
+   * - ``0``
+     - Pass — all metrics within thresholds
+   * - ``1``
+     - Regression — threshold exceeded
+   * - ``2``
+     - Configuration or baseline error
+   * - ``3``
+     - Invalid or missing metrics file
+
+----
+
 flameiq v2 baseline list
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
