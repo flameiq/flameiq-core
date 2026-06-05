@@ -232,6 +232,13 @@ A snapshot is valid if and only if all of the following hold:
 5. ``metadata.environment`` is one of the allowed enum values (unknown
    values are coerced to ``"custom"`` rather than raising an error)
 6. ``metadata.timestamp`` parses as a valid ISO 8601 datetime
+7. If present, ``metadata.tags`` is an object containing no more than 50
+   entries, and all keys and values are strings
+
+Violating the ``metadata.tags`` entry limit raises ``ValueError`` during
+deserialisation. Non-object ``metadata.tags`` values and non-string tag keys or
+values raise ``TypeError``. These are metadata validation failures, not
+schema-version failures.
 
 Serialisation contract
 -----------------------
