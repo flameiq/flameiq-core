@@ -161,6 +161,16 @@ class SnapshotMetadata:
     environment: Environment = Environment.CI
     tags: dict[str, str] = field(default_factory=dict)
 
+    def __post_init__(self) -> None:
+        """Validate that user metadata tags follow the schema contract."""
+        if not isinstance(self.tags, dict):
+            raise TypeError("SnapshotMetadata.tags must be a dictionary.")
+        if len(self.tags) > 50:
+            raise ValueError("SnapshotMetadata.tags must contain no more than 50 entries.")
+        for key, value in self.tags.items():
+            if not isinstance(key, str) or not isinstance(value, str):
+                raise TypeError("SnapshotMetadata.tags keys and values must be strings.")
+
 
 # ---------------------------------------------------------------------------
 # Top-level snapshot
@@ -287,7 +297,7 @@ class PerformanceSnapshot:
             branch=raw_meta.get("branch"),
             timestamp=ts,
             environment=env,
-            tags=dict(raw_meta.get("tags", {})),
+            tags=raw_meta.get("tags", {}),
         )
 
         # --- metrics ---

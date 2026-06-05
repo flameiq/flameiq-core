@@ -137,3 +137,40 @@ class TestPerformanceSnapshot:
         d = snap.to_dict()
         restored = PerformanceSnapshot.from_dict(d)
         assert restored.metrics.custom["score"] == 0.95
+
+    def test_from_dict_rejects_too_many_metadata_tags(self):
+        data = {
+            "schema_version": 1,
+            "metadata": {"tags": {f"k{i}": "value" for i in range(51)}},
+            "metrics": {"throughput": 1000.0},
+        }
+
+        with pytest.raises(ValueError, match="no more than 50"):
+            PerformanceSnapshot.from_dict(data)
+
+    def test_from_dict_rejects_non_object_metadata_tags(self):
+        data = {
+            "schema_version": 1,
+            "metadata": {"tags": [["key", "value"]]},
+            "metrics": {"throughput": 1000.0},
+        }
+
+        with pytest.raises(TypeError, match="must be a dictionary"):
+            PerformanceSnapshot.from_dict(data)
+
+    @pytest.mark.parametrize(
+        "tags",
+        [
+            {1: "value"},
+            {"key": 1},
+        ],
+    )
+    def test_from_dict_rejects_non_string_metadata_tags(self, tags):
+        data = {
+            "schema_version": 1,
+            "metadata": {"tags": tags},
+            "metrics": {"throughput": 1000.0},
+        }
+
+        with pytest.raises(TypeError, match="keys and values must be strings"):
+            PerformanceSnapshot.from_dict(data)
