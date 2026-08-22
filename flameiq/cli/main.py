@@ -21,6 +21,7 @@ _v1_available = False
 try:
     from flameiq.cli.commands.baseline import baseline
     from flameiq.cli.commands.compare import compare
+    from flameiq.cli.commands.diff import diff
     from flameiq.cli.commands.init import init
     from flameiq.cli.commands.report import report
     from flameiq.cli.commands.run import run
@@ -94,6 +95,7 @@ if _v1_available:
     cli.add_command(baseline)
     cli.add_command(report)
     cli.add_command(validate)
+    cli.add_command(diff)
 
 
 def main() -> None:
