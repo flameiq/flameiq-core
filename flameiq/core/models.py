@@ -77,6 +77,20 @@ class MetricDiff:
 
 
 @dataclass(frozen=True)
+class SkippedMetric:
+    """A metric that could not be compared (e.g. zero baseline)."""
+
+    metric_key: str
+    """Dotted key, e.g. ``"latency.p95"``."""
+    baseline_value: float
+    """The reference measurement."""
+    current_value: float
+    """The current measurement."""
+    reason: str
+    """Human-readable reason why it was skipped."""
+
+
+@dataclass(frozen=True)
 class ComparisonResult:
     """The complete result of a baseline-vs-current comparison."""
 
@@ -84,6 +98,8 @@ class ComparisonResult:
     """Overall pass/regression/warning outcome."""
     diffs: list[MetricDiff] = field(default_factory=list)
     """Per-metric differences, in metric-key order."""
+    skipped: list[SkippedMetric] = field(default_factory=list)
+    """Metrics that could not be compared and were skipped."""
     baseline_commit: str | None = None
     """Git SHA of the baseline snapshot, if available."""
     current_commit: str | None = None
@@ -130,6 +146,7 @@ class ComparisonResult:
                 "regressions": len(self.regressions),
                 "warnings": len(self.warnings),
                 "passed": len(self.passed),
+                "skipped": len(self.skipped),
                 "total": len(self.diffs),
             },
             "diffs": [
@@ -146,5 +163,14 @@ class ComparisonResult:
                     "effect_size": d.effect_size,
                 }
                 for d in self.diffs
+            ],
+            "skipped": [
+                {
+                    "metric_key": s.metric_key,
+                    "baseline_value": s.baseline_value,
+                    "current_value": s.current_value,
+                    "reason": s.reason,
+                }
+                for s in self.skipped
             ],
         }
