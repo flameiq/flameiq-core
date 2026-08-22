@@ -186,3 +186,35 @@ class TestCompareSnapshots:
             for d1, d2 in zip(first.diffs, r.diffs, strict=False):
                 assert d1.change_percent == d2.change_percent
                 assert d1.is_regression == d2.is_regression
+
+    def test_zero_baseline_skipped_metrics(self):
+        from flameiq.schema.v1.models import (
+            LatencyMetrics,
+            Metrics,
+            PerformanceSnapshot,
+            SnapshotMetadata,
+        )
+
+        zero_baseline = PerformanceSnapshot(
+            metadata=SnapshotMetadata(commit="zero"),
+            metrics=Metrics(latency=LatencyMetrics(mean=0.0, p95=120.0, p99=200.0)),
+        )
+        current = PerformanceSnapshot(
+            metadata=SnapshotMetadata(commit="current"),
+            metrics=Metrics(latency=LatencyMetrics(mean=100.0, p95=120.0, p99=200.0)),
+        )
+        result = compare_snapshots(zero_baseline, current)
+        
+        compared_keys = {d.metric_key for d in result.diffs}
+        skipped_keys = {s.metric_key for s in result.skipped}
+        
+        assert "latency.mean" not in compared_keys
+        assert "latency.mean" in skipped_keys
+        assert "latency.p95" in compared_keys
+        
+        assert "(1 skipped)" in result.summary
+        
+        d = result.to_dict()
+        assert "skipped" in d
+        assert len(d["skipped"]) == 1
+        assert d["skipped"][0]["metric_key"] == "latency.mean"
