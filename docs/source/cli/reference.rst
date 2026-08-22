@@ -152,6 +152,50 @@ Compare the current run against the stored baseline.
 
 ----
 
+flameiq diff
+------------
+
+Compare two arbitrary snapshot files directly without using a stored baseline.
+
+.. code-block:: bash
+
+   flameiq diff base_metrics.json current_metrics.json
+   flameiq diff base_metrics.json current_metrics.json --fail-on-regression
+   flameiq diff base_metrics.json current_metrics.json --provider pytest-benchmark --json
+   flameiq diff base_metrics.json current_metrics.json --threshold latency.p95=5%
+
+**Options:**
+
+.. code-block:: text
+
+   FILE_A                  Path to reference (baseline) metrics file. Required.
+   FILE_B                  Path to target (current) metrics file. Required.
+   --provider, -p TEXT     Metric provider. Default: json.
+   --fail-on-regression    Exit with code 1 if any regression is detected.
+                           Default: true.
+   --json                  Output the full comparison result as JSON.
+   --threshold, -t TEXT    Override threshold, e.g. --threshold latency.p95=10%
+
+**JSON output format:**
+
+Produces the same :class:`~flameiq.core.models.ComparisonResult` JSON schema as ``flameiq compare``.
+
+**Exit codes:**
+
+.. list-table::
+   :widths: 10 90
+
+   * - ``0``
+     - No regression detected
+   * - ``1``
+     - Regression detected (with ``--fail-on-regression``)
+   * - ``2``
+     - Configuration or threshold error
+   * - ``3``
+     - Metrics file error
+
+----
+
 flameiq baseline
 ----------------
 
