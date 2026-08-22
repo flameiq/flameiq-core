@@ -12,7 +12,7 @@ from flameiq.core.thresholds import (
     evaluate_threshold,
     parse_threshold,
 )
-from tests.fixtures.test_fixtures import BASELINE, PASSING, REGRESSION
+from tests.fixtures.test_fixtures import BASELINE, PASSING, REGRESSION, make_snapshot
 
 pytestmark = pytest.mark.unit
 
@@ -174,6 +174,34 @@ class TestCompareSnapshots:
         # Should not crash — missing metrics skipped
         compared_keys = {d.metric_key for d in result.diffs}
         assert "latency.p95" in compared_keys
+
+    def test_zero_baseline_metric_is_skipped_not_crashed(self):
+        zero_baseline = make_snapshot(throughput=0.0, commit="zero-baseline")
+        result = compare_snapshots(zero_baseline, PASSING)
+        # Should not crash — the zero-baseline metric is excluded from diffs
+        assert "throughput" not in {d.metric_key for d in result.diffs}
+
+    def test_zero_baseline_metric_recorded_in_skipped_metrics(self):
+        zero_baseline = make_snapshot(throughput=0.0, commit="zero-baseline")
+        result = compare_snapshots(zero_baseline, PASSING)
+        assert len(result.skipped_metrics) == 1
+        skipped = result.skipped_metrics[0]
+        assert skipped.metric_key == "throughput"
+        assert skipped.baseline_value == 0.0
+        assert "zero" in skipped.reason.lower()
+
+    def test_non_zero_baselines_have_no_skipped_metrics(self):
+        result = compare_snapshots(BASELINE, PASSING)
+        assert result.skipped_metrics == []
+
+    def test_zero_baseline_metric_included_in_to_dict(self):
+        zero_baseline = make_snapshot(throughput=0.0, commit="zero-baseline")
+        result = compare_snapshots(zero_baseline, PASSING)
+        d = result.to_dict()
+        assert d["counts"]["skipped"] == 1
+        assert len(d["skipped_metrics"]) == 1
+        assert d["skipped_metrics"][0]["metric_key"] == "throughput"
+        assert d["skipped_metrics"][0]["baseline_value"] == 0.0
 
     @pytest.mark.determinism
     def test_determinism_100_runs(self):

@@ -128,6 +128,17 @@ def _print_table(result: object) -> None:
             f"{d.current_value:>12.4f} {chg_str:>10}  {thr:>10}  {status_str}"
         )
 
+    if result.skipped_metrics:
+        click.echo("")
+        click.echo(click.style("  Skipped metrics:", fg="yellow"))
+        for s in result.skipped_metrics:
+            click.echo(
+                click.style(
+                    f"    ⚠ {s.metric_key} — {s.reason} (baseline={s.baseline_value})",
+                    fg="yellow",
+                )
+            )
+
     click.echo("")
     if result.status == RegressionStatus.REGRESSION:
         click.echo(

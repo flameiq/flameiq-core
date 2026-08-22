@@ -32,7 +32,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from flameiq.core.errors import ComparisonError
-from flameiq.core.models import ComparisonResult, MetricDiff, RegressionStatus
+from flameiq.core.models import ComparisonResult, MetricDiff, RegressionStatus, SkippedMetric
 from flameiq.core.thresholds import (
     DEFAULT_THRESHOLD_PERCENT,
     build_threshold_map,
@@ -124,6 +124,7 @@ def compare_snapshots(
     current_flat = current.metrics.flat()
 
     diffs: list[MetricDiff] = []
+    skipped: list[SkippedMetric] = []
     any_regression = False
 
     for metric_key in sorted(baseline_flat.keys()):
@@ -141,6 +142,13 @@ def compare_snapshots(
             change_pct = compute_change_percent(baseline_value, current_value)
         except ComparisonError as exc:
             logger.warning("Skipping metric '%s': %s", metric_key, exc)
+            skipped.append(
+                SkippedMetric(
+                    metric_key=metric_key,
+                    reason="baseline value is zero",
+                    baseline_value=baseline_value,
+                )
+            )
             continue
 
         threshold = thresholds.get(metric_key, DEFAULT_THRESHOLD_PERCENT)
@@ -185,6 +193,7 @@ def compare_snapshots(
     return ComparisonResult(
         status=status,
         diffs=diffs,
+        skipped_metrics=skipped,
         baseline_commit=baseline.metadata.commit,
         current_commit=current.metadata.commit,
         statistical_mode=False,

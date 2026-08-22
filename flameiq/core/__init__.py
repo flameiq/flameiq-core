@@ -17,7 +17,7 @@ from flameiq.core.errors import (
     ThresholdConfigError,
     ValidationError,
 )
-from flameiq.core.models import ComparisonResult, MetricDiff, RegressionStatus
+from flameiq.core.models import ComparisonResult, MetricDiff, RegressionStatus, SkippedMetric
 
 __all__ = [
     # Comparison
@@ -27,6 +27,7 @@ __all__ = [
     "ComparisonResult",
     "MetricDiff",
     "RegressionStatus",
+    "SkippedMetric",
     # Errors
     "FlameIQError",
     "ValidationError",
