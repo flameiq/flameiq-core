@@ -161,6 +161,18 @@ class SnapshotMetadata:
     environment: Environment = Environment.CI
     tags: dict[str, str] = field(default_factory=dict)
 
+    def __post_init__(self) -> None:
+        """Validate that tags does not exceed 50 entries and keys/values are strings."""
+        if len(self.tags) > 50:
+            raise ValueError(
+                f"metadata.tags must contain no more than 50 entries, got {len(self.tags)}."
+            )
+        for k, v in self.tags.items():
+            if not isinstance(k, str) or not isinstance(v, str):
+                raise ValueError(
+                    f"metadata.tags keys and values must be strings, got key={k!r}, value={v!r}"
+                )
+
 
 # ---------------------------------------------------------------------------
 # Top-level snapshot

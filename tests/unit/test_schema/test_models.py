@@ -65,6 +65,26 @@ class TestMetrics:
         assert m.flat()["custom.score"] == 0.98
 
 
+class TestSnapshotMetadata:
+    def test_tags_exactly_50_is_valid(self):
+        tags = {f"tag{i}": f"value{i}" for i in range(50)}
+        meta = SnapshotMetadata(tags=tags)
+        assert len(meta.tags) == 50
+
+    def test_tags_over_50_raises(self):
+        tags = {f"tag{i}": f"value{i}" for i in range(51)}
+        with pytest.raises(ValueError, match="no more than 50"):
+            SnapshotMetadata(tags=tags)
+
+    def test_tags_non_string_key_raises(self):
+        with pytest.raises(ValueError, match="must be strings"):
+            SnapshotMetadata(tags={1: "value"})
+
+    def test_tags_non_string_value_raises(self):
+        with pytest.raises(ValueError, match="must be strings"):
+            SnapshotMetadata(tags={"key": 1})
+
+
 class TestPerformanceSnapshot:
     def test_schema_version_1_only(self):
         with pytest.raises(ValueError, match="schema_version"):
