@@ -77,6 +77,18 @@ class MetricDiff:
 
 
 @dataclass(frozen=True)
+class SkippedMetric:
+    """A metric excluded from comparison, with the reason why."""
+
+    metric_key: str
+    """Dotted key, e.g. ``"throughput"``."""
+    reason: str
+    """Human-readable reason the metric was skipped."""
+    baseline_value: float
+    """The baseline value that triggered the skip."""
+
+
+@dataclass(frozen=True)
 class ComparisonResult:
     """The complete result of a baseline-vs-current comparison."""
 
@@ -84,6 +96,8 @@ class ComparisonResult:
     """Overall pass/regression/warning outcome."""
     diffs: list[MetricDiff] = field(default_factory=list)
     """Per-metric differences, in metric-key order."""
+    skipped_metrics: list[SkippedMetric] = field(default_factory=list)
+    """Metrics excluded from comparison (e.g. zero-baseline guard)."""
     baseline_commit: str | None = None
     """Git SHA of the baseline snapshot, if available."""
     current_commit: str | None = None
@@ -131,7 +145,16 @@ class ComparisonResult:
                 "warnings": len(self.warnings),
                 "passed": len(self.passed),
                 "total": len(self.diffs),
+                "skipped": len(self.skipped_metrics),
             },
+            "skipped_metrics": [
+                {
+                    "metric_key": s.metric_key,
+                    "reason": s.reason,
+                    "baseline_value": s.baseline_value,
+                }
+                for s in self.skipped_metrics
+            ],
             "diffs": [
                 {
                     "metric_key": d.metric_key,

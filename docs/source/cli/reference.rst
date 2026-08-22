@@ -120,8 +120,15 @@ Compare the current run against the stored baseline.
      "statistical_mode": false,
      "summary": "1 regression(s) in: latency.p95",
      "counts": {
-       "regressions": 1, "warnings": 0, "passed": 4, "total": 5
+       "regressions": 1, "warnings": 0, "passed": 4, "total": 5, "skipped": 1
      },
+     "skipped_metrics": [
+       {
+         "metric_key": "throughput",
+         "reason": "baseline value is zero",
+         "baseline_value": 0.0
+       }
+     ],
      "diffs": [
        {
          "metric_key": "latency.p95",
@@ -135,6 +142,11 @@ Compare the current run against the stored baseline.
        }
      ]
    }
+
+Metrics with a zero baseline cannot produce a meaningful percentage change
+(see the :ref:`zero baseline guard <spec_threshold_algorithm>`) and are
+excluded from ``diffs``. They are instead listed in ``skipped_metrics`` so
+CI scripts and dashboards can detect dropped metrics programmatically.
 
 **Exit codes:**
 
